@@ -2,14 +2,12 @@ package com.example.tezis.dao.model.excel.ui;
 
 import com.example.tezis.dao.model.excel.ui.details.ExcelUiContent;
 import com.example.tezis.dao.model.excel.ui.details.ExcelUiHeader;
-import com.example.tezis.service.FileService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
@@ -59,7 +57,7 @@ public class ExcelUi {
             content.addSection(sections.get(i));
         }
 
-        return null;
+        return content;
     }
 
 
@@ -79,8 +77,8 @@ public class ExcelUi {
 
         List<List<Row>> data = new LinkedList<>();
 
+        List<Row> sectionRows = new LinkedList<>();
         for (Row row : sheet) {
-            List<Row> sectionRows = new LinkedList<>();
             if (StringUtils.isNotEmpty(row.getCell(0).getStringCellValue())) {
                 sectionRows.add(row);
             } else {

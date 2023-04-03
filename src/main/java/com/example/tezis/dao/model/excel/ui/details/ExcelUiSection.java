@@ -35,7 +35,7 @@ public class ExcelUiSection {
 
             //description
             sectionItem.setDescriptor(sectionRow.getCell(2).getStringCellValue());
-
+            data.add(sectionItem);
         }
 
     }

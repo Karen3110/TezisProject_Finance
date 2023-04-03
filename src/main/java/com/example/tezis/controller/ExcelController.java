@@ -1,5 +1,6 @@
 package com.example.tezis.controller;
 
+import com.example.tezis.dao.model.excel.ExcelModel;
 import com.example.tezis.dao.model.excel.ExcelSheet;
 import com.example.tezis.dao.model.excel.ui.ExcelUi;
 import com.example.tezis.dao.response.excelController.ModelFoundFailed;
@@ -29,22 +30,22 @@ public class ExcelController {
         this.excelService = excelService;
     }
 
-//    @GetMapping("/{fileName}")
-//    ResponseEntity<String> getExcelModel(@PathVariable String fileName) {
-//        try {
-//            ExcelModel modelByName = excelService.getModelByName(fileName);
-//            return ResponseEntity.
-//                    status(HttpStatus.OK).
-//                    contentType(MediaType.APPLICATION_JSON).
-//                    body(GSON.toJson(modelByName));
-//
-//        } catch (FileNotFoundException ex) {
-//            return ResponseEntity.
-//                    status(HttpStatus.FORBIDDEN).
-//                    contentType(MediaType.APPLICATION_JSON).
-//                    body(GSON.toJson(new ModelFoundFailed(ex)));
-//        }
-//    }
+    @GetMapping("/{fileName}")
+    ResponseEntity<String> getExcelModel(@PathVariable String fileName) {
+        try {
+            ExcelModel modelByName = excelService.getModelByName(fileName);
+            return ResponseEntity.
+                    status(HttpStatus.OK).
+                    contentType(MediaType.APPLICATION_JSON).
+                    body(GSON.toJson(modelByName));
+
+        } catch (FileNotFoundException ex) {
+            return ResponseEntity.
+                    status(HttpStatus.FORBIDDEN).
+                    contentType(MediaType.APPLICATION_JSON).
+                    body(GSON.toJson(new ModelFoundFailed(ex)));
+        }
+    }
 
     @GetMapping("/{fileName}/{sheetName}")
     ResponseEntity<String> getExcelModel(@PathVariable String fileName, @PathVariable String sheetName) {
@@ -63,7 +64,7 @@ public class ExcelController {
         }
     }
 
-    @GetMapping("/{fileName}")
+    @GetMapping("/ui/{fileName}")
     public ResponseEntity<Object> getExcelUiModel(@PathVariable String fileName) {
         try {
             ExcelUi excelUiModel = excelService.getExcelUiModel(fileName);

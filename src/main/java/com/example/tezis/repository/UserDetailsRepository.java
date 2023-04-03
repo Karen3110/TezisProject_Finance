@@ -11,7 +11,8 @@ public interface UserDetailsRepository extends JpaRepository<UserDetails, Intege
     UserDetails getUserDetailsByUserLoginId(int id);
 
     @Modifying
-    @Query(value = " INSERT INTO user_details_filled_files(user_details_id,filled_files_id) values(:userId, :fileId) ", nativeQuery = true)
+    @Query( value = " INSERT INTO user_details_filled_files(user_details_id,filled_files_id) values(:userId, :fileId) ",
+            nativeQuery = true)
     void assignFileToUser(@Param("userId") int userId, @Param("fileId") int fileId);
 
 //

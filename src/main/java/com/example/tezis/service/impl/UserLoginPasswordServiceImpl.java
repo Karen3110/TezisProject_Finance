@@ -57,7 +57,7 @@ public class UserLoginPasswordServiceImpl implements UserLoginPasswordService {
     @Override
     @Transactional(readOnly = false)
     public int makeActiveUser(UserLoginDto loginData) throws UserNotFoundException {
-        if (!existsUserWithUserName(loginData.getLogin())) {
+        if (existsUserWithUserName(loginData.getLogin())) {
             throw new UserNotFoundException("User with Login not found.");
         }
         UserLoginPassword userToLogin = loginPasswordRepository.getByUsername(loginData.getLogin());
@@ -76,6 +76,6 @@ public class UserLoginPasswordServiceImpl implements UserLoginPasswordService {
 
     private boolean existsUserWithUserName(String userName) {
         UserLoginPassword byUsername = loginPasswordRepository.getByUsername(userName);
-        return byUsername != null;
+        return byUsername == null;
     }
 }

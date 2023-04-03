@@ -24,8 +24,8 @@ public class UserDetails {
     private String surname;
 
     private int userLoginId;
-
-    @OneToMany
+//todo: karen: when saving file, create new one in db
+    @ManyToMany
     private List<ExcelFile> filledFiles;
 
     public UserDetails(String name, String surname) {
