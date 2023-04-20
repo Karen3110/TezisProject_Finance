@@ -87,6 +87,7 @@ public class ExcelUi {
                 sectionRows = new LinkedList<>();
             }
         }
+        data.add(sectionRows);
         return data;
     }
 

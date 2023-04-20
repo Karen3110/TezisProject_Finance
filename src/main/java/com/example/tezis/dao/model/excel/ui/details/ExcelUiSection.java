@@ -16,12 +16,15 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ExcelUiSection {
     private String header;
+    private String description;
     private List<ExcelUiItem> data = new LinkedList<>();
 
     public ExcelUiSection(List<Row> sectionRows) {
         header = sectionRows.get(0).getCell(0).getStringCellValue();
-
         sectionRows.remove(0);
+        description = sectionRows.get(0).getCell(0).getStringCellValue();
+        sectionRows.remove(0);
+
         for (Row sectionRow : sectionRows) {
             ExcelUiItem sectionItem = new ExcelUiItem();
 
