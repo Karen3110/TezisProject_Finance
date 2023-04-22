@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,9 +25,9 @@ public class UserDetails {
     private String surname;
 
     private int userLoginId;
-//todo: karen: when saving file, create new one in db
+    //todo: karen: when saving file, create new one in db
     @ManyToMany
-    private List<ExcelFile> filledFiles;
+    private List<ExcelFile> filledFiles = new LinkedList<>();
 
     public UserDetails(String name, String surname) {
         this.id = 0;

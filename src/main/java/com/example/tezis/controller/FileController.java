@@ -35,8 +35,7 @@ public class FileController {
     )
     ResponseEntity<String> uploadFIle(@RequestParam("file") MultipartFile multipartFile) {
         String fileName = multipartFile.getOriginalFilename();
-        //todo: karen: remove .xsl file type for checking and add validation for this type of file
-        if (fileName != null && (fileName.endsWith(".xsl") || fileName.endsWith(".xlsx"))) {
+        if (fileName != null && fileName.endsWith(".xlsx")) {
             int savedId = fileService.uploadFile(multipartFile);
             if (savedId != -1) {
                 return ResponseEntity

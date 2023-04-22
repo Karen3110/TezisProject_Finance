@@ -32,9 +32,8 @@ public class ExcelUi {
             return;
         }
 
-        // sheet at:0 is for question :: predefined
+        // sheet at:0 is for question  #predefined#
         List<List<Row>> excelSheetSectionSplit = getExcelSheetSectionSplit(workbook, 0);
-// FIXME: 3/31/23   karen: null pter listi vra
         header = getUiHeader(excelSheetSectionSplit);
         content = getUiContent(excelSheetSectionSplit);
 

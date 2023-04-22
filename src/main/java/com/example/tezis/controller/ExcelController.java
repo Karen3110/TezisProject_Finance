@@ -4,6 +4,7 @@ import com.example.tezis.dao.model.excel.ExcelModel;
 import com.example.tezis.dao.model.excel.ExcelSheet;
 import com.example.tezis.dao.model.excel.ui.ExcelUi;
 import com.example.tezis.dao.response.excelController.ModelFoundFailed;
+import com.example.tezis.dao.response.excelController.UiModelGenerationFailed;
 import com.example.tezis.service.ExcelService;
 import com.example.tezis.util.exceptions.SheetNotFoundException;
 import com.google.gson.Gson;
@@ -65,15 +66,12 @@ public class ExcelController {
     }
 
     @GetMapping("/ui/{fileName}")
-    public ResponseEntity<Object> getExcelUiModel(@PathVariable String fileName) {
+    public ResponseEntity<ExcelUi> getExcelUiModel(@PathVariable String fileName) {
         try {
             ExcelUi excelUiModel = excelService.getExcelUiModel(fileName);
             return ResponseEntity.ok(excelUiModel);
-
         } catch (FileNotFoundException e) {
-
-            //todo: karen: throw bad request;
-            e.printStackTrace();
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new UiModelGenerationFailed(e));
         }
 
         return null;

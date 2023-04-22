@@ -1,5 +1,6 @@
 package com.example.tezis.controller;
 
+import com.example.tezis.dao.response.fileController.FileDescription;
 import com.example.tezis.dao.response.userController.FileAssignFiled;
 import com.example.tezis.service.UserDetailsService;
 import com.example.tezis.util.exceptions.UserNotFoundException;
@@ -8,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -39,8 +38,13 @@ public class UserController {
 
     }
 
-    //todo 1: Kostan: implement release method for user and file
-    //todo 2: Kostan: implement get method to see all assigned files.
+    @GetMapping(value = "/get/{userId}/list", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<FileDescription>> getAllAssignedFiles(@PathVariable("userId") int userId) throws UserNotFoundException {
+        List<FileDescription> assignedFiles = userDetailsService.getAllAssigned(userId);
+        return ResponseEntity.ok(assignedFiles);
+    }
+
+    //todo 1: Kostan: implement unasign method for user and file
 
 
 }

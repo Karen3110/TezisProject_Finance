@@ -11,7 +11,6 @@ public class ExcelUiItem {
     private Object value;
     private CellType type;
     private String descriptor;
+    private String address;
 
-
-    // todo: karen: add validations too, for value;
 }

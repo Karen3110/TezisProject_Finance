@@ -35,6 +35,7 @@ public class ExcelUiSection {
             Cell valueCell = sectionRow.getCell(1);
             sectionItem.setType(valueCell.getCellType());
             sectionItem.setValue(getCellValue(valueCell));
+            sectionItem.setAddress(valueCell.getAddress().formatAsString());
 
             //description
             sectionItem.setDescriptor(sectionRow.getCell(2).getStringCellValue());

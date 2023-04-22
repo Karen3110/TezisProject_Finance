@@ -4,6 +4,7 @@ import com.example.tezis.dao.model.excel.ExcelFile;
 import com.example.tezis.dao.model.user.UserDetails;
 import com.example.tezis.dao.request.userController.UserLoginDto;
 import com.example.tezis.dao.request.userController.UserRegisterDto;
+import com.example.tezis.dao.response.fileController.FileDescription;
 import com.example.tezis.dao.response.userController.RegistrationSuccess;
 import com.example.tezis.repository.UserDetailsRepository;
 import com.example.tezis.service.FileService;
@@ -16,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,8 +44,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 userData.getPassword(),
                 isAdmin ? UserRole.ADMIN : UserRole.USER);
 
-        //todo: karen: implement saving of user data.(name, surname, etc.)
-        UserDetails userDetails = new UserDetails("NAME", "SURNAME");
+        UserDetails userDetails = new UserDetails(userData.getName(), userData.getSurname());
         userDetails.setUserLoginId(registeredLoginId);
 
         UserDetails savedUser = userDetailsRepository.save(userDetails);
@@ -83,5 +85,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         userDetailsRepository.assignFileToUser(userId, fileId);
+    }
+
+    @Override
+    public List<FileDescription> getAllAssigned(int userId) throws UserNotFoundException {
+        Optional<UserDetails> userById = userDetailsRepository.findById(userId);
+        if (userById.isEmpty()) {
+            throw new UserNotFoundException("User with id:" + userId + " not found.");
+        }
+
+        List<ExcelFile> filledFiles = userById.get().getFilledFiles();
+        return filledFiles
+                .stream()
+                .map(item -> new FileDescription(item.getId(), item.getFileName()))
+                .collect(Collectors.toList());
     }
 }
