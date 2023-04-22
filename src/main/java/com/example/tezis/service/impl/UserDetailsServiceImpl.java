@@ -89,15 +89,37 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public List<FileDescription> getAllAssigned(int userId) throws UserNotFoundException {
-        Optional<UserDetails> userById = userDetailsRepository.findById(userId);
-        if (userById.isEmpty()) {
-            throw new UserNotFoundException("User with id:" + userId + " not found.");
-        }
+        UserDetails userById = userDetailsRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id:" + userId + " not found."));
 
-        List<ExcelFile> filledFiles = userById.get().getFilledFiles();
+
+        List<ExcelFile> filledFiles = userById.getFilledFiles();
         return filledFiles
                 .stream()
                 .map(item -> new FileDescription(item.getId(), item.getFileName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void releaseFileFromUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException {
+        UserDetails userById = userDetailsRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id:" + userId + " not found."));
+
+
+        ExcelFile fileById = fileService.getFileById(fileId);
+        if (fileById == null) {
+            throw new FileNotFoundException("File with id:" + fileId + " not found.");
+        }
+
+        List<ExcelFile> filledFiles = userById.getFilledFiles();
+        ExcelFile fileToDelete = filledFiles
+                .stream()
+                .filter(item -> item.getId() == fileId)
+                .findFirst().orElseThrow(() -> new FileNotFoundException("File with id:" + fileId + "is not assigned to user"));
+        filledFiles.remove(fileToDelete);
+
     }
 }

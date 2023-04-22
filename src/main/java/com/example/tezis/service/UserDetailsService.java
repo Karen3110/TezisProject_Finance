@@ -21,4 +21,6 @@ public interface UserDetailsService {
     void assignFileToUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException;
 
     List<FileDescription> getAllAssigned(int userId) throws UserNotFoundException;
+
+    void releaseFileFromUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException;
 }

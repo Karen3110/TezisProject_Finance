@@ -67,7 +67,6 @@ public class FileController {
     }
 
     HttpHeaders getHeaders(ExcelFile file) {
-
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.ALL_VALUE);
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"");

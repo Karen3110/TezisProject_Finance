@@ -2,6 +2,7 @@ package com.example.tezis.controller;
 
 import com.example.tezis.dao.response.fileController.FileDescription;
 import com.example.tezis.dao.response.userController.FileAssignFiled;
+import com.example.tezis.dao.response.userController.FileReleaseFiled;
 import com.example.tezis.service.UserDetailsService;
 import com.example.tezis.util.exceptions.UserNotFoundException;
 import com.google.gson.Gson;
@@ -38,13 +39,24 @@ public class UserController {
 
     }
 
+    @PutMapping("release/{userId}/{fileId}")
+    public ResponseEntity<String> releaseFileFromUser(@PathVariable("userId") int userId, @PathVariable("fileId") int fileId) {
+        try {
+            userDetailsService.releaseFileFromUser(userId, fileId);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UserNotFoundException | FileNotFoundException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(GSON.toJson(new FileReleaseFiled(e.getMessage())));
+        }
+
+    }
+
     @GetMapping(value = "/get/{userId}/list", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FileDescription>> getAllAssignedFiles(@PathVariable("userId") int userId) throws UserNotFoundException {
         List<FileDescription> assignedFiles = userDetailsService.getAllAssigned(userId);
         return ResponseEntity.ok(assignedFiles);
     }
-
-    //todo 1: Kostan: implement unasign method for user and file
-
 
 }

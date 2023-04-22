@@ -1,7 +1,7 @@
 package com.example.tezis.dao.response.userController;
 
 public class FileAssignFiled {
-    private final String message = "Registration failed.";
+    private final String message = "Assign file to user failed.";
 
     private final String reason;
 
