@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -73,18 +72,26 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = false)
-    public void assignFileToUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException {
-        Optional<UserDetails> userById = userDetailsRepository.findById(userId);
-        if (userById.isEmpty()) {
-            throw new UserNotFoundException("User with id:" + userId + " not found.");
+    public int assignFileToUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException,IllegalStateException {
+        UserDetails userDetails = userDetailsRepository
+                .findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User with id:" + userId + " not found."));
+
+        if (fileService.isAssignedToUser(userId,fileId)) {
+            throw new IllegalStateException("File already assigned to user");
         }
 
-        ExcelFile fileById = fileService.getFileById(fileId);
-        if (fileById == null) {
-            throw new FileNotFoundException("File with id:" + fileId + " not found.");
-        }
+        ExcelFile fileById = fileService
+                .getFileByIdOpt(fileId)
+                .orElseThrow(() -> new FileNotFoundException("File with id:" + fileId + "is not found"));
 
-        userDetailsRepository.assignFileToUser(userId, fileId);
+        ExcelFile copy = fileById.copy();
+        copy.setUserAssigned(true);
+        int fileIndexToAssign = fileService.uploadFile(copy);
+
+
+        userDetailsRepository.assignFileToUser(userId, fileIndexToAssign, fileId);
+        return fileIndexToAssign;
     }
 
     @Override
@@ -108,18 +115,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("User with id:" + userId + " not found."));
 
-
-        ExcelFile fileById = fileService.getFileById(fileId);
-        if (fileById == null) {
-            throw new FileNotFoundException("File with id:" + fileId + " not found.");
-        }
-
         List<ExcelFile> filledFiles = userById.getFilledFiles();
         ExcelFile fileToDelete = filledFiles
                 .stream()
                 .filter(item -> item.getId() == fileId)
                 .findFirst().orElseThrow(() -> new FileNotFoundException("File with id:" + fileId + "is not assigned to user"));
         filledFiles.remove(fileToDelete);
+        fileService.deleteFile(fileToDelete);
 
     }
 }

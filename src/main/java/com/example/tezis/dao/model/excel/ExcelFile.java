@@ -24,9 +24,19 @@ public class ExcelFile {
 
     private String fileName;
 
+    private boolean isUserAssigned = false;
 
     public ExcelFile(String fileName, byte[] bytes) {
         this.fileName = fileName;
         this.data = bytes;
+    }
+
+    public ExcelFile copy() {
+        ExcelFile clone = new ExcelFile();
+        clone.setData(data.clone());
+        clone.setFileName(fileName);
+        clone.setId(0);
+        clone.setUserAssigned(isUserAssigned);
+        return clone;
     }
 }

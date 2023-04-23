@@ -3,6 +3,7 @@ package com.example.tezis.controller;
 import com.example.tezis.dao.response.fileController.FileDescription;
 import com.example.tezis.dao.response.userController.FileAssignFiled;
 import com.example.tezis.dao.response.userController.FileReleaseFiled;
+import com.example.tezis.dao.response.userController.FileReleaseSuccess;
 import com.example.tezis.service.UserDetailsService;
 import com.example.tezis.util.exceptions.UserNotFoundException;
 import com.google.gson.Gson;
@@ -28,9 +29,9 @@ public class UserController {
     @PostMapping("assign/{userId}/{fileId}")
     public ResponseEntity<String> assignFileToUser(@PathVariable("userId") int userId, @PathVariable("fileId") int fileId) {
         try {
-            userDetailsService.assignFileToUser(userId, fileId);
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (UserNotFoundException | FileNotFoundException e) {
+            int assignedFileId = userDetailsService.assignFileToUser(userId, fileId);
+            return ResponseEntity.status(HttpStatus.OK).body(GSON.toJson(assignedFileId));
+        } catch (UserNotFoundException | FileNotFoundException | IllegalStateException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -43,7 +44,7 @@ public class UserController {
     public ResponseEntity<String> releaseFileFromUser(@PathVariable("userId") int userId, @PathVariable("fileId") int fileId) {
         try {
             userDetailsService.releaseFileFromUser(userId, fileId);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.status(HttpStatus.OK).body(GSON.toJson(new FileReleaseSuccess()));
         } catch (UserNotFoundException | FileNotFoundException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

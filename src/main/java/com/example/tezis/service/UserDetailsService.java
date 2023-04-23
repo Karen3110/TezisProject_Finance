@@ -18,7 +18,7 @@ public interface UserDetailsService {
 
     void logout(int id) throws UserNotFoundException;
 
-    void assignFileToUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException;
+    int assignFileToUser(int userId, int fileId) throws UserNotFoundException, FileNotFoundException, IllegalStateException;
 
     List<FileDescription> getAllAssigned(int userId) throws UserNotFoundException;
 

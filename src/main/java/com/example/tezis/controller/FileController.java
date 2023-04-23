@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController()
@@ -51,7 +52,7 @@ public class FileController {
 
 
     @GetMapping("/download/{fileId}")
-    ResponseEntity<byte[]> downloadExcelFileById(@PathVariable Integer fileId) {
+    ResponseEntity<byte[]> downloadExcelFileById(@PathVariable Integer fileId) throws FileNotFoundException {
         ExcelFile file = fileService.getFileById(fileId);
         if (file != null) {
             return ResponseEntity.status(HttpStatus.OK).headers(getHeaders(file)).body(file.getData());

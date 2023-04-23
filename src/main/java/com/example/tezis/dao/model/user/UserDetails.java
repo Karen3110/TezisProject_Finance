@@ -35,5 +35,9 @@ public class UserDetails {
         this.surname = surname;
     }
 
+    public boolean hasAssignedFile(int fileId){
+        return filledFiles.stream().anyMatch(item -> item.getId() == fileId);
+    }
+
 
 }
