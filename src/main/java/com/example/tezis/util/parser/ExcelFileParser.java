@@ -1,7 +1,6 @@
 package com.example.tezis.util.parser;
 
 import com.example.tezis.dao.model.excel.ExcelFile;
-import com.example.tezis.dao.model.excel.ExcelModel;
 import com.example.tezis.dao.model.excel.ui.ExcelUi;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -11,14 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ExcelFileParser {
-
-    public static ExcelModel parseToModel(ExcelFile excelFile) {
-        Workbook workbook = getWorkbook(excelFile);
-        if (workbook == null) {
-            return null;
-        }
-        return new ExcelModel(excelFile.getId(), excelFile.getFileName(), workbook);
-    }
 
     public static ExcelUi parseToUiModel(ExcelFile excelFile) {
         Workbook workbook = getWorkbook(excelFile);
